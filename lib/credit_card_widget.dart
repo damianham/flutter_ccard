@@ -157,7 +157,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             color: const Color(0xFF273240),
             fontFamily: 'halter',
             fontSize: MediaQuery.of(context).size.height * 0.015,
-            package: 'credit_card',
+            package: 'flutter_ccard',
           ),
         );
 
@@ -278,7 +278,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
             color: Colors.white,
             fontFamily: 'halter',
             fontSize: widget.textSize ?? 16,
-            package: 'credit_card',
+            package: 'flutter_ccard',
           ),
         );
 
@@ -314,7 +314,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                     'icons/chip.png',
                     height: MediaQuery.of(context).size.height * 0.04,
                     width: MediaQuery.of(context).size.height * 0.04,
-                    package: 'credit_card',
+                    package: 'flutter_ccard',
                   ),
                 ),
                 Container(
@@ -347,7 +347,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                             fontSize: widget.textSize != null
                                 ? widget.textSize - 5
                                 : MediaQuery.of(context).size.height * 0.01,
-                            package: 'credit_card',
+                            package: 'flutter_ccard',
                           ),
                         ),
                         Container(
@@ -380,7 +380,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
                         fontSize: widget.textSize != null
                             ? widget.textSize
                             : MediaQuery.of(context).size.height * 0.01,
-                        package: 'credit_card',
+                        package: 'flutter_ccard',
                       ),
                     ),
                   ),
@@ -490,7 +490,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           height:
               widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
           width: widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
-          package: 'credit_card',
+          package: 'flutter_ccard',
         );
         isAmex = false;
         break;
@@ -501,7 +501,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           height:
               widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
           width: widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
-          package: 'credit_card',
+          package: 'flutter_ccard',
         );
         isAmex = true;
         break;
@@ -512,7 +512,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           height:
               widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
           width: widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
-          package: 'credit_card',
+          package: 'flutter_ccard',
         );
         isAmex = false;
         break;
@@ -523,7 +523,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
           height:
               widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
           width: widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
-          package: 'credit_card',
+          package: 'flutter_ccard',
         );
         isAmex = false;
         break;
@@ -531,7 +531,7 @@ class _CreditCardWidgetState extends State<CreditCardWidget>
       default:
         icon = Container(
           height:
-          widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
+              widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
           width: widget.logoHeight ?? MediaQuery.of(context).size.height * 0.04,
         );
         isAmex = false;
@@ -725,7 +725,7 @@ Container getChipImage() {
       'icons/chip.png',
       height: 52,
       width: 52,
-      package: 'credit_card',
+      package: 'flutter_ccard',
     ),
   );
 }

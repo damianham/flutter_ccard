@@ -1,8 +1,8 @@
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
-import 'package:credit_card/credit_card_form.dart';
-import 'package:credit_card/credit_card_model.dart';
-import 'package:credit_card/flutter_credit_card.dart';
+import 'package:flutter_ccard/credit_card_form.dart';
+import 'package:flutter_ccard/credit_card_model.dart';
+import 'package:flutter_ccard/flutter_ccard.dart';
 
 import 'colors/light_colors.dart';
 
@@ -53,7 +53,6 @@ class MySampleState extends State<MySample> {
                 child: SingleChildScrollView(
                   child: CreditCardForm(
                     onCreditCardModelChange: onCreditCardModelChange,
-                 
                   ),
                 ),
               )

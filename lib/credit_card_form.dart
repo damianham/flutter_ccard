@@ -11,6 +11,7 @@ class CreditCardForm extends StatefulWidget {
       this.expiryDate,
       this.cardHolderName,
       this.cvvCode,
+      this.idNumber,
       @required this.onCreditCardModelChange,
       this.themeColor,
       this.textColor = Colors.black,
@@ -18,15 +19,18 @@ class CreditCardForm extends StatefulWidget {
       this.cardHolderNameInputDecoration,
       this.cardNumberInputDecoration,
       this.cvvInputDecoration,
+      this.idInputDecoration,
       this.textStyle,
       this.onTapExpDate,
-      this.expiryDateInputDecoration})
+      this.expiryDateInputDecoration,
+      this.prompts})
       : super(key: key);
 
   final String cardNumber;
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
+  final String idNumber;
   final void Function(CreditCardModel) onCreditCardModelChange;
   final Color themeColor;
   final Color textColor;
@@ -35,8 +39,10 @@ class CreditCardForm extends StatefulWidget {
   final InputDecoration expiryDateInputDecoration;
   final InputDecoration cvvInputDecoration;
   final InputDecoration cardHolderNameInputDecoration;
+  final InputDecoration idInputDecoration;
   final TextStyle textStyle;
   final Function onTapExpDate;
+  final Map<String, String> prompts;
 
   @override
   _CreditCardFormState createState() => _CreditCardFormState();
@@ -47,12 +53,20 @@ class _CreditCardFormState extends State<CreditCardForm> {
   String expiryDate;
   String cardHolderName;
   String cvvCode;
+  String idNumber;
 
   bool isCvvFocused = false;
   Color themeColor;
 
   void Function(CreditCardModel) onCreditCardModelChange;
   CreditCardModel creditCardModel;
+  Map<String, String> prompts = {
+    'card_number': 'Card number',
+    'expires': 'Expires',
+    'cvv': 'CVV',
+    'card_holder': 'Card Holder',
+    'id_card': 'Identity Card'
+  };
 
   final MaskedTextController _cardNumberController =
       MaskedTextController(mask: '0000 0000 0000 0000');
@@ -62,6 +76,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
       TextEditingController();
   final TextEditingController _cvvCodeController =
       MaskedTextController(mask: '000');
+  final TextEditingController _identityCardController = TextEditingController();
 
   FocusNode cvvFocusNode = FocusNode();
 
@@ -75,9 +90,10 @@ class _CreditCardFormState extends State<CreditCardForm> {
     expiryDate = widget.expiryDate ?? '';
     cardHolderName = widget.cardHolderName ?? '';
     cvvCode = widget.cvvCode ?? '';
+    idNumber = widget.idNumber ?? '';
 
-    creditCardModel = CreditCardModel(
-        cardNumber, expiryDate, cardHolderName, cvvCode, isCvvFocused);
+    creditCardModel = CreditCardModel(cardNumber, expiryDate, cardHolderName,
+        cvvCode, isCvvFocused, idNumber);
   }
 
   @override
@@ -87,6 +103,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     createCreditCardModel();
 
     onCreditCardModelChange = widget.onCreditCardModelChange;
+    if (widget.prompts != null) prompts = widget.prompts;
 
     cvvFocusNode.addListener(textFieldFocusDidChange);
 
@@ -118,6 +135,14 @@ class _CreditCardFormState extends State<CreditCardForm> {
       setState(() {
         cvvCode = _cvvCodeController.text;
         creditCardModel.cvvCode = cvvCode;
+        onCreditCardModelChange(creditCardModel);
+      });
+    });
+
+    _identityCardController.addListener(() {
+      setState(() {
+        idNumber = _identityCardController.text;
+        creditCardModel.idNumber = idNumber;
         onCreditCardModelChange(creditCardModel);
       });
     });
@@ -153,11 +178,11 @@ class _CreditCardFormState extends State<CreditCardForm> {
                     : widget.textStyle,
                 maxLines: 1,
                 decoration: widget.cardNumberInputDecoration == null
-                    ? const InputDecoration(
-                        contentPadding: EdgeInsets.all(10.0),
-                        labelText: 'Card number',
+                    ? InputDecoration(
+                        contentPadding: const EdgeInsets.all(10.0),
+                        labelText: prompts['card_number'],
                         hintText: 'xxxx xxxx xxxx xxxx',
-                        border: OutlineInputBorder(),
+                        border: const OutlineInputBorder(),
                       )
                     : widget.cardNumberInputDecoration,
               ),
@@ -169,10 +194,9 @@ class _CreditCardFormState extends State<CreditCardForm> {
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     margin: const EdgeInsets.only(left: 16, top: 8, right: 16),
                     child: TextFormField(
-                      onTap: widget.onTapExpDate ,
-                      readOnly: widget.onTapExpDate ==null ? false : true,
+                      onTap: widget.onTapExpDate,
+                      readOnly: widget.onTapExpDate == null ? false : true,
                       controller: _expiryDateController,
-                     
                       cursorColor: widget.cursorColor ?? themeColor,
                       style: widget.textStyle == null
                           ? TextStyle(
@@ -180,9 +204,9 @@ class _CreditCardFormState extends State<CreditCardForm> {
                             )
                           : widget.textStyle,
                       decoration: widget.expiryDateInputDecoration ??
-                          const InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Expired Date',
+                          InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: prompts['expires'],
                               hintText: 'MM/YY'),
                       keyboardType: TextInputType.number,
                     ),
@@ -206,8 +230,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
                       ],
                       decoration: widget.cvvInputDecoration == null
                           ? InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'CVV',
+                              border: const OutlineInputBorder(),
+                              labelText: prompts['cvv'],
                               hintText: 'XXX',
                             )
                           : widget.cvvInputDecoration,
@@ -235,10 +259,31 @@ class _CreditCardFormState extends State<CreditCardForm> {
                     : widget.textStyle,
                 decoration: widget.cardHolderNameInputDecoration == null
                     ? InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Card Holder',
+                        border: const OutlineInputBorder(),
+                        labelText: prompts['card_holder'],
                       )
                     : widget.cardHolderNameInputDecoration,
+                keyboardType: TextInputType.text,
+                textInputAction: TextInputAction.done,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              margin: const EdgeInsets.only(left: 16, top: 8, right: 16),
+              child: TextFormField(
+                controller: _identityCardController,
+                cursorColor: widget.cursorColor ?? themeColor,
+                style: widget.textStyle == null
+                    ? TextStyle(
+                        color: widget.textColor,
+                      )
+                    : widget.textStyle,
+                decoration: widget.idInputDecoration == null
+                    ? InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: prompts['id_card'],
+                      )
+                    : widget.idInputDecoration,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
               ),
