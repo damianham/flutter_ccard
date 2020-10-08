@@ -11,7 +11,6 @@ class CreditCardForm extends StatefulWidget {
       this.expiryDate,
       this.cardHolderName,
       this.cvvCode,
-      this.idNumber,
       @required this.onCreditCardModelChange,
       this.themeColor,
       this.textColor = Colors.black,
@@ -30,7 +29,6 @@ class CreditCardForm extends StatefulWidget {
   final String expiryDate;
   final String cardHolderName;
   final String cvvCode;
-  final String idNumber;
   final void Function(CreditCardModel) onCreditCardModelChange;
   final Color themeColor;
   final Color textColor;
@@ -53,7 +51,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
   String expiryDate;
   String cardHolderName;
   String cvvCode;
-  String idNumber;
 
   bool isCvvFocused = false;
   Color themeColor;
@@ -64,8 +61,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     'card_number': 'Card number',
     'expires': 'Expires',
     'cvv': 'CVV',
-    'card_holder': 'Card Holder',
-    'id_card': 'Identity Card'
+    'card_holder': 'Card Holder'
   };
 
   final MaskedTextController _cardNumberController =
@@ -76,7 +72,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
       TextEditingController();
   final TextEditingController _cvvCodeController =
       MaskedTextController(mask: '000');
-  final TextEditingController _identityCardController = TextEditingController();
 
   FocusNode cvvFocusNode = FocusNode();
 
@@ -90,10 +85,9 @@ class _CreditCardFormState extends State<CreditCardForm> {
     expiryDate = widget.expiryDate ?? '';
     cardHolderName = widget.cardHolderName ?? '';
     cvvCode = widget.cvvCode ?? '';
-    idNumber = widget.idNumber ?? '';
 
-    creditCardModel = CreditCardModel(cardNumber, expiryDate, cardHolderName,
-        cvvCode, isCvvFocused, idNumber);
+    creditCardModel = CreditCardModel(
+        cardNumber, expiryDate, cardHolderName, cvvCode, isCvvFocused);
   }
 
   @override
@@ -103,7 +97,7 @@ class _CreditCardFormState extends State<CreditCardForm> {
     createCreditCardModel();
 
     onCreditCardModelChange = widget.onCreditCardModelChange;
-    if (widget.prompts != null) prompts = widget.prompts;
+    prompts = widget.prompts ?? prompts;
 
     cvvFocusNode.addListener(textFieldFocusDidChange);
 
@@ -138,14 +132,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
         onCreditCardModelChange(creditCardModel);
       });
     });
-
-    _identityCardController.addListener(() {
-      setState(() {
-        idNumber = _identityCardController.text;
-        creditCardModel.idNumber = idNumber;
-        onCreditCardModelChange(creditCardModel);
-      });
-    });
   }
 
   @override
@@ -156,6 +142,8 @@ class _CreditCardFormState extends State<CreditCardForm> {
 
   @override
   Widget build(BuildContext context) {
+    _cardHolderNameController.value = TextEditingValue(text: cardHolderName);
+
     return Theme(
       data: ThemeData(
         primaryColor: themeColor.withOpacity(0.8),
@@ -263,27 +251,6 @@ class _CreditCardFormState extends State<CreditCardForm> {
                         labelText: prompts['card_holder'],
                       )
                     : widget.cardHolderNameInputDecoration,
-                keyboardType: TextInputType.text,
-                textInputAction: TextInputAction.done,
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              margin: const EdgeInsets.only(left: 16, top: 8, right: 16),
-              child: TextFormField(
-                controller: _identityCardController,
-                cursorColor: widget.cursorColor ?? themeColor,
-                style: widget.textStyle == null
-                    ? TextStyle(
-                        color: widget.textColor,
-                      )
-                    : widget.textStyle,
-                decoration: widget.idInputDecoration == null
-                    ? InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: prompts['id_card'],
-                      )
-                    : widget.idInputDecoration,
                 keyboardType: TextInputType.text,
                 textInputAction: TextInputAction.done,
               ),
